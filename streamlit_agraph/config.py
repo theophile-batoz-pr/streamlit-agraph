@@ -76,9 +76,9 @@ class ConfigBuilder(object):
     def basic_widget(self):
         basic_expander = st.sidebar.expander("Basic Config", expanded=True)
         with basic_expander:
-            basic_expander.number_input("height", value=750, key="height")
-            basic_expander.number_input("width", value=750, key="width")
-            basic_expander.checkbox("directed", value=True, key="directed")
+            basic_expander.number_input("height", value=getattr(self.config, "height", 750) , key="height")
+            basic_expander.number_input("width", value=getattr(self.config, "width", 750) , key="width")
+            basic_expander.checkbox("directed", value=getattr(self.config, "height", True) , key="directed")
             self.kwargs["height"] = st.session_state.height
             self.kwargs["width"] = st.session_state.width
             self.kwargs["directed"] = st.session_state.directed
