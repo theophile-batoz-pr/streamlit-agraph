@@ -76,14 +76,14 @@ class ConfigBuilder(object):
     def basic_widget(self):
         basic_expander = st.sidebar.expander("Basic Config", expanded=True)
         with basic_expander:
-            basic_expander.number_input("height", 
+            basic_expander.number_input("height",
                                         value=getattr(self.config, "height", 750),
                                         key="height")
-            basic_expander.number_input("width", 
-                                        value=getattr(self.config, "width", 750), 
+            basic_expander.number_input("width",
+                                        value=getattr(self.config, "width", 750),
                                         key="width")
-            basic_expander.checkbox("directed", 
-                                    value=getattr(self.config, "directed", True), 
+            basic_expander.checkbox("directed",
+                                    value=getattr(self.config, "directed", True),
                                     key="directed")
             self.kwargs["height"] = st.session_state.height
             self.kwargs["width"] = st.session_state.width
@@ -92,18 +92,37 @@ class ConfigBuilder(object):
     def physics_widget(self):
         physics_expander = st.sidebar.expander("Physics Config", expanded=False)
         with physics_expander:
-            physics_expander.checkbox("physics", value=True, key="physics")
+            physics_expander.checkbox("physics",
+                                      value=getattr(self.config, "physics", True),
+                                      key="physics")
+            options = ["barnesHut", 
+                       "forceAtlas2Based", 
+                       "hierarchicalRepulsion",
+                       "repulsion"]
+            solver = getattr(self.config, "solver", None)
+            if solver is None: 
+                index = 0
+            else:
+                index = options.index(solver)                
             physics_expander.selectbox("Solver",
-                                       options=["barnesHut",
-                                                "forceAtlas2Based",
-                                                "hierarchicalRepulsion",
-                                                "repulsion"],
+                                       options=options,
+                                       index=index,
                                        key="solver")
-            physics_expander.number_input("minVelocity", value=1, key="minVelocity")
-            physics_expander.number_input("maxVelocity", value=100, key="maxVelocity")
-            physics_expander.checkbox("stabilize", value=True, key="stabilize")
-            physics_expander.checkbox("fit", value=True, key="fit")
-            physics_expander.number_input("timestep", value=0.5, key="timestep")
+            physics_expander.number_input("minVelocity", 
+                                          value=getattr(self.config, "minVelocity", 1),
+                                          key="minVelocity")
+            physics_expander.number_input("maxVelocity", 
+                                          value=getattr(self.config, "maxVelocity",100),
+                                          key="maxVelocity")
+            physics_expander.checkbox("stabilize", 
+                                      value=getattr(self.config, "stabilize", True),
+                                      key="stabilize")
+            physics_expander.checkbox("fit", 
+                                      value=getattr(self.config, "fit", True),
+                                      key="fit")
+            physics_expander.number_input("timestep", 
+                                          value=getattr(self.config, "timestep", 0.5),
+                                          key="timestep")
 
             self.kwargs["physics"] = st.session_state.physics
             self.kwargs["minVelocity"] = st.session_state.minVelocity
