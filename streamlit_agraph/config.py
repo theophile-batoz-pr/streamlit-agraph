@@ -188,7 +188,9 @@ class ConfigBuilder(object):
 
     def group_widget(self):
         group_expander = st.sidebar.expander("Group Config", expanded=False)
-        group_expander.checkbox("groups", value=False, key="groups")
+        group_expander.checkbox("groups", 
+                                value=getattr(self.config, "groups", False), 
+                                key="groups")
         if st.session_state.groups:
             if self.nodes:
                 groups = list(set([node.__dict__.get("group", None) for node in self.nodes]))
