@@ -95,18 +95,13 @@ class ConfigBuilder(object):
             physics_expander.checkbox("physics",
                                       value=getattr(self.config, "physics", True),
                                       key="physics")
-            options = ["barnesHut", 
+            solvers = ["barnesHut", 
                        "forceAtlas2Based", 
                        "hierarchicalRepulsion",
-                       "repulsion"]
-            solver = getattr(self.config, "solver", None)
-            if solver is None: 
-                index = 0
-            else:
-                index = options.index(solver)                
+                       "repulsion"]              
             physics_expander.selectbox("Solver",
-                                       options=options,
-                                       index=index,
+                                       options=solvers,
+                                       index=self._get_index(solvers, "solver"),
                                        key="solver")
             physics_expander.number_input("minVelocity", 
                                           value=getattr(self.config, "minVelocity", 1),
@@ -161,39 +156,21 @@ class ConfigBuilder(object):
                                            key="edgeMinimization")
             hierarchical_expander.checkbox("parentCentralization", 
                                            value=getattr(self.config, "parentCentralization", True), 
-                                           key="parentCentralization")
-            
+                                           key="parentCentralization")            
             directions = ["UD", "DU", "LR", "RL"]
-            direction = getattr(self.config, "direction", None)
-            if direction is None: 
-                index = 0
-            else: 
-                index = directions.index(direction)
             hierarchical_expander.selectbox("direction", 
                                             options=directions,
-                                            index=index, 
-                                            key="direction")
-            
+                                            index=self._get_index(directions, "direction"), 
+                                            key="direction")            
             sortmethods = ["hubsize", "directed"]
-            sortmethod = getattr(self.config, "sortMethod", None)
-            if sortmethod is None: 
-                index = 0
-            else: 
-                index = sortmethods.index(sortmethod)
             hierarchical_expander.selectbox("sortMethod", 
-                                            options=["hubsize", "directed"], 
-                                            index=index,
-                                            key="sortMethod")
-            
+                                            options=sortmethods, 
+                                            index=self._get_index(sortmethods, "sortMethod"),
+                                            key="sortMethod")            
             shaketowards = ["roots", "leaves"]
-            shaketoward = getattr(self.config, "shakeTowards", None)
-            if shaketoward is None: 
-                index = 0
-            else: 
-                index = shaketowards.index(shaketoward)
             hierarchical_expander.selectbox("shakeTowards", 
                                             options=shaketowards,
-                                            index=index,
+                                            index=self._get_index(shaketowards, "shakeTowards"),
                                             key="shakeTowards")
             self.kwargs.update({
                            "hierarchical": st.session_state.hierarchical,
@@ -233,3 +210,13 @@ class ConfigBuilder(object):
         else:
             self.config = Config(**self.kwargs)
         return self.config
+    
+    def _get_index(self, options, target):
+        val = getattr(self.config, target, None)
+        if val is None: 
+            return 0 
+        try: 
+            index = options.index(target)
+        except ValueError: 
+            index = 0
+        return index
