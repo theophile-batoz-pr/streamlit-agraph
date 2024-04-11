@@ -140,16 +140,61 @@ class ConfigBuilder(object):
                 if st.session_state.hierarchical:
                     st.session_state.physics = False
 
-            hierarchical_expander.checkbox("hierarchical", value=False, key="hierarchical", on_change=set_physics_off)
-            hierarchical_expander.number_input("levelSeparation", value=150, key="levelSeparation")
-            hierarchical_expander.number_input("nodeSpacing", value=100, key="nodeSpacing")
-            hierarchical_expander.number_input("treeSpacing", value=200, key="treeSpacing")
-            hierarchical_expander.checkbox("blockShifting", value=True, key="blockShifting")
-            hierarchical_expander.checkbox("edgeMinimization", value=True, key="edgeMinimization")
-            hierarchical_expander.checkbox("parentCentralization", value=True, key="parentCentralization")
-            hierarchical_expander.selectbox("direction", options=["UD", "DU", "LR", "RL"], key="direction")
-            hierarchical_expander.selectbox("sortMethod", options=["hubsize", "directed"], key="sortMethod")
-            hierarchical_expander.selectbox("shakeTowards", options=["roots", "leaves"], key="shakeTowards")
+            hierarchical_expander.checkbox("hierarchical", 
+                                           value=getattr(self.config, "hierarchical", False),
+                                           key="hierarchical", 
+                                           on_change=set_physics_off)
+            hierarchical_expander.number_input("levelSeparation", 
+                                               value=getattr(self.config, "levelSeparation", 150),
+                                               key="levelSeparation")
+            hierarchical_expander.number_input("nodeSpacing", 
+                                               value=getattr(self.config, "nodeSpacing", 100),
+                                               key="nodeSpacing")
+            hierarchical_expander.number_input("treeSpacing", 
+                                               value=getattr(self.config, "treeSpacing", 200),
+                                               key="treeSpacing")
+            hierarchical_expander.checkbox("blockShifting", 
+                                           value=getattr(self.config, "blockShifting", True),
+                                           key="blockShifting")
+            hierarchical_expander.checkbox("edgeMinimization", 
+                                           value=getattr(self.config, "edgeMinimization", True),
+                                           key="edgeMinimization")
+            hierarchical_expander.checkbox("parentCentralization", 
+                                           value=getattr(self.config, "parentCentralization", True), 
+                                           key="parentCentralization")
+            
+            directions = ["UD", "DU", "LR", "RL"]
+            direction = getattr(self.config, "direction", None)
+            if direction is None: 
+                index = 0
+            else: 
+                index = directions.index(direction)
+            hierarchical_expander.selectbox("direction", 
+                                            options=directions,
+                                            index=index, 
+                                            key="direction")
+            
+            sortmethods = ["hubsize", "directed"]
+            sortmethod = getattr(self.config, "sortMethod", None)
+            if sortmethod is None: 
+                index = 0
+            else: 
+                index = sortmethods.index(sortmethod)
+            hierarchical_expander.selectbox("sortMethod", 
+                                            options=["hubsize", "directed"], 
+                                            index=index,
+                                            key="sortMethod")
+            
+            shaketowards = ["roots", "leaves"]
+            shaketoward = getattr(self.config, "shakeTowards", None)
+            if shaketoward is None: 
+                index = 0
+            else: 
+                index = shaketowards.index(shaketoward)
+            hierarchical_expander.selectbox("shakeTowards", 
+                                            options=shaketowards,
+                                            index=index,
+                                            key="shakeTowards")
             self.kwargs.update({
                            "hierarchical": st.session_state.hierarchical,
                            "levelSeparation": st.session_state.levelSeparation,
