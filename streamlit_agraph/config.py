@@ -64,6 +64,7 @@ class Config:
 
 class ConfigBuilder(object):
     def __init__(self, nodes=None, edges=None, **kwargs):
+        self.config = Config(**kwargs)
         self.kwargs = {}
         self.nodes = nodes
         st.sidebar.write("Agraph Configurations")
@@ -71,7 +72,6 @@ class ConfigBuilder(object):
         self.physics_widget = self.physics_widget()
         self.hierarchical_widget = self.hierarchical_widget()
         self.groups = self.group_widget()
-        self.config = Config()
 
     def basic_widget(self):
         basic_expander = st.sidebar.expander("Basic Config", expanded=True)
