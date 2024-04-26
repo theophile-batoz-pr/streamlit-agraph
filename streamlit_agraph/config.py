@@ -94,27 +94,27 @@ class ConfigBuilder(object):
             physics_expander.checkbox("physics",
                                       value=self.kwargs.get("physics", True),
                                       key="physics")
-            solvers = ["barnesHut", 
-                       "forceAtlas2Based", 
+            solvers = ["barnesHut",
+                       "forceAtlas2Based",
                        "hierarchicalRepulsion",
-                       "repulsion"]              
+                       "repulsion"]
             physics_expander.selectbox("Solver",
                                        options=solvers,
                                        index=self._get_index(solvers, "solver"),
                                        key="solver")
-            physics_expander.number_input("minVelocity", 
+            physics_expander.number_input("minVelocity",
                                           value=self.kwargs.get("minVelocity", 1),
                                           key="minVelocity")
-            physics_expander.number_input("maxVelocity", 
+            physics_expander.number_input("maxVelocity",
                                           value=self.kwargs.get("maxVelocity",100),
                                           key="maxVelocity")
-            physics_expander.checkbox("stabilize", 
+            physics_expander.checkbox("stabilize",
                                       value=self.kwargs.get("stabilization", True),
                                       key="stabilize")
-            physics_expander.checkbox("fit", 
+            physics_expander.checkbox("fit",
                                       value=self.kwargs.get('fit', True),
                                       key="fit")
-            physics_expander.number_input("timestep", 
+            physics_expander.number_input("timestep",
                                           value=self.kwargs.get("timestep", 0.5),
                                           key="timestep")
 
@@ -134,40 +134,40 @@ class ConfigBuilder(object):
                 if st.session_state.hierarchical:
                     st.session_state.physics = False
 
-            hierarchical_expander.checkbox("hierarchical", 
+            hierarchical_expander.checkbox("hierarchical",
                                            value=self.kwargs.get("hierarchical", False),
-                                           key="hierarchical", 
+                                           key="hierarchical",
                                            on_change=set_physics_off)
-            hierarchical_expander.number_input("levelSeparation", 
+            hierarchical_expander.number_input("levelSeparation",
                                                value=self.kwargs.get("levelSeparation", 150),
                                                key="levelSeparation")
-            hierarchical_expander.number_input("nodeSpacing", 
+            hierarchical_expander.number_input("nodeSpacing",
                                                value=self.kwargs.get("nodeSpacing", 100),
                                                key="nodeSpacing")
-            hierarchical_expander.number_input("treeSpacing", 
+            hierarchical_expander.number_input("treeSpacing",
                                                value=self.kwargs.get("treeSpacing", 200),
                                                key="treeSpacing")
-            hierarchical_expander.checkbox("blockShifting", 
+            hierarchical_expander.checkbox("blockShifting",
                                            value=self.kwargs.get("blockShifting", True),
                                            key="blockShifting")
-            hierarchical_expander.checkbox("edgeMinimization", 
+            hierarchical_expander.checkbox("edgeMinimization",
                                            value=self.kwargs.get("edgeMinimization", True),
                                            key="edgeMinimization")
-            hierarchical_expander.checkbox("parentCentralization", 
-                                           value=self.kwargs.get("parentCentralization", True), 
-                                           key="parentCentralization")            
+            hierarchical_expander.checkbox("parentCentralization",
+                                           value=self.kwargs.get("parentCentralization", True),
+                                           key="parentCentralization")
             directions = ["UD", "DU", "LR", "RL"]
-            hierarchical_expander.selectbox("direction", 
+            hierarchical_expander.selectbox("direction",
                                             options=directions,
-                                            index=self._get_index(directions, "direction"), 
-                                            key="direction")            
+                                            index=self._get_index(directions, "direction"),
+                                            key="direction")
             sortmethods = ["hubsize", "directed"]
-            hierarchical_expander.selectbox("sortMethod", 
-                                            options=sortmethods, 
+            hierarchical_expander.selectbox("sortMethod",
+                                            options=sortmethods,
                                             index=self._get_index(sortmethods, "sortMethod"),
-                                            key="sortMethod")            
+                                            key="sortMethod")
             shaketowards = ["roots", "leaves"]
-            hierarchical_expander.selectbox("shakeTowards", 
+            hierarchical_expander.selectbox("shakeTowards",
                                             options=shaketowards,
                                             index=self._get_index(shaketowards, "shakeTowards"),
                                             key="shakeTowards")
@@ -187,8 +187,8 @@ class ConfigBuilder(object):
 
     def group_widget(self):
         group_expander = st.sidebar.expander("Group Config", expanded=False)
-        group_expander.checkbox("groups", 
-                                value=self.kwargs.get("groups", False), 
+        group_expander.checkbox("groups",
+                                value=self.kwargs.get("groups", False),
                                 key="groups")
         if st.session_state.groups:
             if self.nodes:
@@ -211,19 +211,13 @@ class ConfigBuilder(object):
         else:
             self.config = Config(**self.kwargs)
         return self.config
-    
+
     def _get_index(self, options, target):
         val = self.kwargs.get(target, None)
-        if val is None: 
-            return 0 
-        try: 
+        if val is None:
+            return 0
+        try:
             index = options.index(val)
-        except ValueError: 
+        except ValueError:
             index = 0
-        print(f'{target=}, {val=}, {options=}, {index=}')
         return index
-
-if __name__ == '__main__':
-    config = Config() 
-    print(type(config.physics))
-    print(config.physics.get('enabled'))
